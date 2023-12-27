@@ -1,4 +1,5 @@
 const User = require("../models/user.model");
+const Cart = require("../models/cart.model");
 
 const getUsers = async (req, res) => {
   try {
@@ -9,4 +10,19 @@ const getUsers = async (req, res) => {
   }
 };
 
-module.exports = { getUsers };
+const createUser = async (req, res) => {
+  try {
+    const user = new User(req.body);
+    await user.save();
+    const cart = new Cart({
+      userId: user._id,
+      products: [],
+    })
+    await cart.save();
+    res.status(201).json(user);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+}
+
+module.exports = { getUsers, createUser };
