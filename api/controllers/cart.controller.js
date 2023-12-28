@@ -41,9 +41,13 @@ const updateCart = async (req, res) => {
 
 const updateMyCart = async (req, res) => {
   try {
-    const cart = await Cart.updateOne({ userId: res.locals.user._id }, req.body, {
-      new: true,
-    });
+    const cart = await Cart.updateOne(
+      { userId: res.locals.user._id },
+      req.body,
+      {
+        new: true,
+      }
+    );
     res.status(200).json(cart);
   } catch (error) {
     return res.status(500).json({ message: error.message });
@@ -52,11 +56,34 @@ const updateMyCart = async (req, res) => {
 
 const getMyCart = async (req, res) => {
   try {
-    const cart = await Cart.findOne({ userId: res.locals.user._id }, { __v: 0 });
+    const cart = await Cart.findOne(
+      { userId: res.locals.user._id },
+      { __v: 0 }
+    );
     res.status(200).json(cart);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
-}
+};
 
-module.exports = { getCarts, getCart, createCart, updateCart, updateMyCart, getMyCart};
+const getMyCartDetailed = async (req, res) => {
+  try {
+    const cart = await Cart.findOne(
+      { userId: res.locals.user._id },
+      { __v: 0 }
+    ).populate("products._id",{_id:1, title:1, price:1, thumbnail:1});
+    res.status(200).json(cart);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = {
+  getCarts,
+  getCart,
+  createCart,
+  updateCart,
+  updateMyCart,
+  getMyCart,
+  getMyCartDetailed,
+};

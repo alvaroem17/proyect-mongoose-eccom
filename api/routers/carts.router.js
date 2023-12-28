@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { updateMyCart, getMyCart } = require('../controllers/cart.controller.js');
+const { updateMyCart, getMyCart, getMyCartDetailed } = require('../controllers/cart.controller.js');
 const { checkEmail, checkPassword, checkAuth } = require('../middleware/index.js');
 
 
@@ -10,6 +10,7 @@ const { checkEmail, checkPassword, checkAuth } = require('../middleware/index.js
 //router.get('/:id', getCart)
 
 router.get('/myCart', checkAuth, getMyCart)
+router.get('/myCartDetailed', checkAuth, getMyCartDetailed)
 router.put('/myCart', checkAuth, updateMyCart)
 
 module.exports = router
